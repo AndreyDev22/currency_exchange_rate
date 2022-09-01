@@ -11,6 +11,8 @@ const elementKZT = document.querySelector('[data-value="KZT"]');
 const elementINR = document.querySelector('[data-value="INR"]');
 const elementCNY = document.querySelector('[data-value="CNY"]');
 const elementCAD = document.querySelector('[data-value="CAD"]');
+const elementBTC = document.querySelector('[data-value="BTC/USDT"]');
+
 
 async function getCurrencies() {
     const response = await fetch('https://www.cbr-xml-daily.ru/daily_json.js');
@@ -43,3 +45,14 @@ async function getCurrencies() {
 }
 
 getCurrencies();
+
+const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+
+ws.onmessage = function(msg){
+    const response = JSON.parse(msg.data);
+    console.log(response.p);
+    rates.BTC = response.p;
+    elementBTC.textContent = rates.BTC.Value;
+};
+
+
