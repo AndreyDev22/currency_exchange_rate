@@ -12,6 +12,7 @@ const elementINR = document.querySelector('[data-value="INR"]');
 const elementCNY = document.querySelector('[data-value="CNY"]');
 const elementCAD = document.querySelector('[data-value="CAD"]');
 const elementBTC = document.querySelector('[data-value="BTC/USDT"]');
+const elementETH = document.querySelector('[data-value="ETH/USDT"]');
 
 
 async function getCurrencies() {
@@ -46,13 +47,22 @@ async function getCurrencies() {
 
 getCurrencies();
 
-const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+const btc = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
 
-ws.onmessage = function(msg){
+btc.onmessage = function(msg){
     const response = JSON.parse(msg.data);
-    console.log(response.p);
-    rates.BTC = response.p;
-    elementBTC.textContent = rates.BTC.Value;
+    // console.log(response.p);
+    rates.BTC = response;
+    elementBTC.textContent = Math.floor(rates.BTC.p * 100) / 100 ;
+};
+
+const eth = new WebSocket("wss://stream.binance.com:9443/ws/ethusdt@trade");
+
+eth.onmessage = function(msg){
+    const response = JSON.parse(msg.data);
+    // console.log(response.p);
+    rates.ETH = response;
+    elementETH.textContent = Math.floor(rates.ETH.p * 100) / 100 ;
 };
 
 
